@@ -60,9 +60,19 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function sendMail(userData) {
+    try {
+      console.log("aaaaa");
+
+      await api.post("/mail/handler", userData);
+    } catch (error) {
+      console.error("Error sending mail:", error);
+    }
+  }
+
   return (
     <AuthContext.Provider
-      value={{ loggedInUser, login, register, logout, fetchUser }}
+      value={{ loggedInUser, login, register, logout, sendMail, fetchUser }}
     >
       {children}
     </AuthContext.Provider>

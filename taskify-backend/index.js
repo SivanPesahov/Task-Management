@@ -23,8 +23,10 @@ async function main() {
   // ROUTES
   const authRoutes = require("./routes/auth.route");
   const taskRoutes = require("./routes/task.route");
+  const mailRoutes = require("./routes/mail.route");
   app.use("/api/auth", authRoutes);
   app.use("/api/task", verifyToken, taskRoutes);
+  app.use("/api/mail", verifyToken, mailRoutes);
 
   app.use("*", (req, res) => {
     res.sendFile(path.resolve("public", "index.html"));

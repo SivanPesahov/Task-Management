@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useContext, useRef } from "react";
 import useIntersectionShow from "@/utils/observerFunc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import AuthContext from "../contexts/AuthContext";
 
 export const ContactPage = () => {
   useIntersectionShow();
+  const context = useContext(AuthContext);
   const { toast } = useToast();
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const bodyRef = useRef(null);
 
   function handleComment(ev) {
     ev.preventDefault();
-    toast({
-      title: "Comment sent",
-      duration: 3000,
-    });
+    const userData = {
+      email: context.loggedInUser.email,
+      title: titleRef.current.value,
+      description: descriptionRef.current.value,
+      body: bodyRef.current.value,
+    };
+    try {
+      context.sendMail(userData);
+      toast({
+        title: "Comment sent",
+        duration: 3000,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -52,13 +68,13 @@ export const ContactPage = () => {
           <CardContent>
             <form className="flex flex-col gap-4">
               <div>
-                <Input placeholder={"Title"} />
+                <Input placeholder={"Title"} ref={titleRef} />
               </div>
               <div>
-                <Input placeholder={"Description"} />
+                <Input placeholder={"Description"} ref={descriptionRef} />
               </div>
               <div>
-                <Input placeholder={"body"} className={"h-24"} />
+                <Input placeholder={"body"} className={"h-24"} ref={bodyRef} />
               </div>
 
               <Button className={"bg-sky-900"} onClick={handleComment}>
