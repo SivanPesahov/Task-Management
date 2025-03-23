@@ -60,11 +60,9 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  async function sendMail(userData) {
+  async function sendMail(mailDetails) {
     try {
-      console.log("aaaaa");
-
-      await api.post("/mail/handler", userData);
+      await api.post("/mail/handler", mailDetails);
     } catch (error) {
       console.error("Error sending mail:", error);
     }

@@ -40,6 +40,13 @@ function RegisterPage() {
       await context.register(userData);
 
       if (context.loggedInUser) {
+        const greetingMail = {
+          email: eMailRef.current.value,
+          title: "Welcome to Taskify!",
+          description: `Welcome ${firstNameRef.current.value}`,
+          body: "We are happy to register you to Taskify!",
+        };
+        context.sendMail(greetingMail);
         navigate("/", { replace: true });
       } else {
         toast({
