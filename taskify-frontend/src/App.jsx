@@ -28,10 +28,6 @@ function ProtectedRoute({ children }) {
     return <div>Loading...</div>;
   }
 
-  if (loggedInUser === null) {
-    return <Navigate to="/auth/login" />;
-  }
-
   return children;
 }
 
@@ -40,20 +36,21 @@ function App() {
     <>
       <AuthProvider>
         <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
           <Route
-            path="/"
             element={
               <ProtectedRoute>
                 <MainLayout />
               </ProtectedRoute>
             }
           >
-            <Route index element={<HomePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="contact" element={<ContactPage />} />
             <Route path="create" element={<CreateTaskPage />} />
-            <Route path="/Tasks">
+            <Route path="Tasks">
               <Route path="List" element={<TasksPage />}>
                 <Route path=":taskId" element={<TaskDetailsPage />} />
               </Route>

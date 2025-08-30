@@ -23,6 +23,10 @@ function Header() {
   const context = useContext(AuthContext);
   const loggedInUser = context.loggedInUser;
 
+  if (!loggedInUser) {
+    return null;
+  }
+
   return (
     <header className="bg-white/5 px-4 flex justify-between items-center h-14">
       <div className="flex">
