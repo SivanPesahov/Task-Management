@@ -10,7 +10,8 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "../backend/public",
+    // outDir: "../backend/public",
+    outDir: "../taskify-backend/public",
     emptyOutDir: true,
   },
 });

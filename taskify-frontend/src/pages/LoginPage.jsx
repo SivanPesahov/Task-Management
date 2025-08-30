@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,33 +7,50 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { LogIn } from "lucide-react";
 import AuthContext from "../contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import useIntersectionShow from "@/utils/observerFunc";
-import { Arrow } from "@/components/Arrow";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import MarketingPane from "@/components/MarketingPane";
+import PasswordField from "@/components/PasswordField";
 
 function LoginPage() {
   const context = useContext(AuthContext);
-  const usernameRef = useRef(null);
-  const passwordRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useIntersectionShow();
 
-  async function handleLogin(ev) {
-    ev.preventDefault();
-    const userData = {
-      username: usernameRef.current.value,
-      password: passwordRef.current.value,
-    };
+  const LoginSchema = z.object({
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters")
+      .trim(),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  });
 
+  const form = useForm({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: { username: "", password: "" },
+  });
+
+  async function onSubmit(values) {
     try {
-      await context.login(userData);
+      await context.login(values);
       setTimeout(() => {
         if (localStorage.getItem("jwt-taskify")) {
           navigate("/", { replace: true });
@@ -46,7 +63,7 @@ function LoginPage() {
       }, 500);
     } catch (err) {
       toast({
-        title: "TypeError",
+        title: "Login failed",
         description: "Something went wrong... please try again",
       });
       console.log(err);
@@ -54,80 +71,84 @@ function LoginPage() {
   }
 
   return (
-    <>
-      <section className="hiddenn h-screen flex flex-col items-center justify-center text-center bg-sky-900 p-8">
-        <h1 className="text-white text-4xl mb-4">
-          Welcome to Your Task Manager
-        </h1>
-        <p className="text-white text-lg max-w-2xl">
-          Manage your tasks effortlessly with our intuitive task manager. Stay
-          organized and keep track of your daily, weekly, and monthly tasks.
-        </p>
-        <Arrow />
-      </section>
-      <section className="hiddenn h-screen flex flex-col items-center justify-center text-center bg-sky-900 p-8">
-        <h1 className="text-white text-4xl mb-4">Plan Your Day</h1>
-        <p className="text-white text-lg max-w-2xl mb-4">
-          Start your day with a clear plan. Our task manager allows you to
-          create, prioritize, and track tasks to boost your productivity.
-        </p>
-        <p className="text-white text-lg max-w-2xl">
-          Whether you have personal tasks, work assignments, or project
-          deadlines, our task manager is designed to help you stay on top of
-          everything.
-        </p>
-      </section>
-      <section className="hiddenn h-screen flex flex-col items-center justify-center text-center bg-sky-900 p-8">
-        <h1 className="text-white text-4xl mb-4">Achieve Your Goals</h1>
-        <p className="text-white text-lg max-w-2xl mb-4">
-          Stay focused and achieve your goals with our powerful task manager.
-          Track your progress, meet deadlines, and accomplish more.
-        </p>
-        <p className="text-white text-lg max-w-2xl">
-          Sign up now to start managing your tasks efficiently and take the
-          first step towards a more organized and productive life.
-        </p>
-      </section>
-      <section className="section h-screen flex flex-col items-center justify-center text-center bg-sky-900 p-8">
-        <Card className="shadow-2xl">
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              <span>Login</span> <LogIn />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form className="flex flex-col gap-4" onSubmit={handleLogin}>
-              <div>
-                <Label>Username:</Label>
-                <Input ref={usernameRef} placeholder="Enter username..." />
-              </div>
-              <div>
-                <Label>Password:</Label>
-                <Input
-                  type="password"
-                  ref={passwordRef}
-                  placeholder="Enter password..."
-                />
-              </div>
-              <Button type="submit" className="bg-sky-900">
-                Login
-              </Button>
-            </form>
-          </CardContent>
-          <CardFooter>
-            <p className="text-xs">
-              Don't have an account?{" "}
-              <Link
-                className="underline font-bold text-sky-900"
-                to="/auth/register"
-              >
-                Register
-              </Link>
-            </p>
-          </CardFooter>
-        </Card>
-      </section>
-    </>
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-sky-100 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-sky-200/40 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-indigo-200/40 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto flex min-h-screen max-w-7xl items-stretch px-4 sm:px-6 lg:px-8">
+        <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-2">
+          <MarketingPane />
+
+          <section className="flex w-full items-center justify-center py-10">
+            <Card className="w-full max-w-md backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-900/60 shadow-xl border-slate-200/60 dark:border-slate-800/60">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span className="text-2xl">Login</span>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-sky-100 px-2.5 py-1 text-sm font-medium text-sky-700 dark:bg-sky-900/40 dark:text-sky-200">
+                    <LogIn className="h-4 w-4" />
+                    Secure
+                  </span>
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4"
+                  >
+                    <CardContent className="space-y-4">
+                      <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Username</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter username..."
+                                autoComplete="username"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <PasswordField
+                        control={form.control}
+                        show={showPassword}
+                        onToggle={() => setShowPassword((v) => !v)}
+                      />
+                    </CardContent>
+
+                    <CardFooter className="flex-col w-full">
+                      <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={form.formState.isSubmitting}
+                      >
+                        {form.formState.isSubmitting
+                          ? "Logging in..."
+                          : "Login"}
+                      </Button>
+                      <Link to="/auth/register" className="w-full">
+                        <Button variant="outline" className="w-full mt-2">
+                          Register
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </section>
+        </div>
+      </div>
+    </div>
   );
 }
 
