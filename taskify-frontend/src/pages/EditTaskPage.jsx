@@ -10,10 +10,10 @@ import {
 import api from "@/services/api.service";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Label } from "../components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { getBackgroundColorClass } from "@/utils/taskColorFunc";
 import { CircleMinus } from "lucide-react";

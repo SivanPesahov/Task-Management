@@ -6,7 +6,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
+} from "../components/ui/form";
 
 /**
  * PasswordField

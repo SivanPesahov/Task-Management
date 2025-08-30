@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "@/services/api.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   AlertDialog,
@@ -21,6 +20,7 @@ import { X } from "lucide-react";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { getBackgroundColorClass } from "@/utils/taskColorFunc";
+import { Label } from "../components/ui/label";
 
 export const TaskDetailsPage = () => {
   const { taskId } = useParams();
