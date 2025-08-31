@@ -8,7 +8,9 @@ async function handler(req, res) {
   const { email, title, description, body } = req.body;
 
   const transporter = nodemailer.createTransport({
-    service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -17,8 +19,8 @@ async function handler(req, res) {
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
+      from: email,
+      to: process.env.EMAIL_USER,
       subject: title,
       text: `${description}\n\n${body}`,
     });

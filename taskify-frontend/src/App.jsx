@@ -28,6 +28,10 @@ function ProtectedRoute({ children }) {
     return <div>Loading...</div>;
   }
 
+  if (loggedInUser === null) {
+    return <Navigate to="/auth/login" />;
+  }
+
   return children;
 }
 
