@@ -13,7 +13,7 @@ export function ChecklistItemField({
   return (
     <li
       key={itemId}
-      className="group flex items-center gap-2 px-3 py-2 hover:bg-foreground/5 rounded-md transition-colors"
+      className="group flex items-center gap-2 px-3 py-2 hover:bg-foreground/5 rounded-md transition-colors min-w-0"
     >
       <Checkbox
         checked={isDone}
@@ -24,7 +24,7 @@ export function ChecklistItemField({
         control={control}
         name={`todoList.${index}.title`}
         render={({ field }) => (
-          <FormItem className="flex-1">
+          <FormItem className="flex-1 min-w-0">
             <FormControl>
               <CEField
                 value={field.value}
@@ -34,7 +34,7 @@ export function ChecklistItemField({
                 placeholder={`Todo #${index + 1}`}
                 ariaLabel={`Todo ${index + 1} title`}
                 className={
-                  "h-7 px-1 text-sm border border-transparent focus:border-input rounded-sm " +
+                  "block w-auto px-1 text-sm border border-transparent focus:border-input rounded-sm break-words whitespace-pre-wrap " +
                   (isDone
                     ? "text-muted-foreground line-through"
                     : "text-foreground")
