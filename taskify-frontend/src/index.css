@@ -83,3 +83,20 @@
       @apply bg-background text-foreground;
     }
   }
+
+  /* מונע היפוך לועזית בתוך contentEditable */
+.ce-placeholder[role="textbox"] {
+  unicode-bidi: plaintext !important;
+  direction: auto !important;
+}
+
+/* תחזוקה: כל אלמנט שמוגדר dir=auto יקבל bidi תקין גם אם יש כללים יורשים */
+[dir="auto"] {
+  unicode-bidi: plaintext !important;
+}
+
+/* גורף לכל contentEditable למעט contenteditable="false" */
+[contenteditable]:not([contenteditable="false"]) {
+  unicode-bidi: plaintext !important;
+  direction: auto !important;
+}
