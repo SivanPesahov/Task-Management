@@ -58,7 +58,6 @@ function App() {
               <Route path="List" element={<TasksPage />}>
                 <Route path=":taskId" element={<TaskDetailsPage />} />
               </Route>
-              {/* <Route path="edit/:taskId" element={<EditTaskPage />} /> */}
             </Route>
           </Route>
 
